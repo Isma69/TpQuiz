@@ -4,15 +4,14 @@ CREATE TABLE questions (
   content TEXT,
   creation_date DATE,
   user_id INT,
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
 CREATE TABLE users (
   id INT PRIMARY KEY,
-  pseudo VARCHAR(255),
+  pseudo VARCHAR(255)
 );
-
 
 
 CREATE TABLE score (

@@ -13,13 +13,13 @@ require_once "config.php";
 
     if ($user) {
         // Utilisateur existant, rediriger vers la page du menu
-        header('Location: /quiz/menu.php?id=' . $user['id']);
+        header('Location: /quiz/quiz.php?id=' . $user['id']);
         exit();
     } else {
-        // Insérer un nouvel utilisateur
-        $insertStmt = $pdo->prepare("INSERT INTO users (pseudo) VALUES (:pseudo)");
-        $insertStmt->bindValue(':pseudo', $username);
-        $insertStmt->execute();
+       // Insérer un nouvel utilisateur
+    $insertStmt = $pdo->prepare("INSERT INTO users (pseudo) VALUES (:pseudo)");
+    $insertStmt->bindValue(':pseudo', $username);
+    $insertStmt->execute();
 
         // Rediriger vers la page d'accueil avec un message de succès
         header('Location: /index.php?message=Votre compte a bien été créé. Veuillez vous connecter.');

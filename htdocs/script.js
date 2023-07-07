@@ -1,3 +1,7 @@
+// Ajouter le lien CSS dans le head du document
+document.head.insertAdjacentHTML('beforeend', '<link rel="stylesheet" type="text/css" href="styles.css">');
+
+
 // Sélectionner tous les boutons de réponse
 var buttons = document.querySelectorAll('button[id^="rep"]');
 

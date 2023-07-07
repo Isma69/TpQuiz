@@ -1,3 +1,7 @@
+<head>
+<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+
 <?php
 require_once '../process/config.php';
 include '../header.php';
@@ -45,44 +49,41 @@ $randomIndex = rand(0, count($options));
 array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
 ?>
 
-<section class="container" id="questionreponse">
-    <div class="row d-flex justify-content-center">
-        <div class="question col-lg-12 col-md-12 col-sm-12 mt-5">
+<section id="questionreponse">
+    <div>
+        <div>
             <h3><?= $questionData['title'] ?></h3>
         </div>
     </div>
+</section>
 
-    <div class="container" id="reponses">
-        <div class="row row-cols-2 d-flex justify-content-center">
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-                <button id="rep1" value="<?= $options[0] ?>" class="col1"><?= $options[0] ?></button>
-                <button id="rep2" value="<?= $options[1] ?>" class="col2"><?= $options[1] ?></button>
-            </div>
+<section id="reponses">
+    <div>
+        <div>
+            <button id="rep1" value="<?= $options[0] ?>"><?= $options[0] ?></button>
+            <button id="rep2" value="<?= $options[1] ?>"><?= $options[1] ?></button>
+            <button id="rep3" value="<?= $options[2] ?>"><?= $options[2] ?></button>
+            <button id="rep4" value="<?= $options[3] ?>"><?= $options[3] ?></button>
         </div>
+    </div>
 
-        <div class="row row-cols-2 d-flex justify-content-center">
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-                <button id="rep3" value="<?= $options[2] ?>" class="col3"><?= $options[2] ?></button>
-                <button id="rep4" value="<?= $options[3] ?>" class="col4"><?= $options[3] ?></button>
-            </div>
+    <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
+    <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
+
+    <div>
+        <div>
+            <div id="timer">20</div>
         </div>
+    </div>
 
-        <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
-        <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
-
-        <div class="row d-flex justify-content-center">
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-                <div id="timer">20</div>
-            </div>
-        </div>
-
-        <div class="row d-flex justify-content-center">
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-                <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/20</div>
-            </div>
+    <div>
+        <div>
+            <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/20</div>
         </div>
     </div>
 </section>
+
+
 
 <script src="../script.js"></script>
 <script>

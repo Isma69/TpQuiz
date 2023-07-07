@@ -19,15 +19,27 @@ function enableButtons() {
 function goToNextQuestion() {
     disableButtons();
 
-    // Attendre 2 secondes avant de charger la nouvelle question
-    setTimeout(function () {
-        window.location.reload();
-    }, 2000);
+    // Mettre à jour la base de données avec l'ID de la question répondue
+    var questionId = document.getElementById('questionId').value;
+    updateAnsweredQuestions(questionId)
+        .then(function() {
+            // Passer à la question suivante après un délai
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        })
+        .catch(function(error) {
+            console.log('Failed to update answered questions:', error);
+            // Passer à la question suivante même en cas d'erreur
+            setTimeout(function() {
+                window.location.reload();
+            },1000);
+        });
 }
 
 // Fonction pour mettre à jour la base de données avec l'ID de la question répondue
 function updateAnsweredQuestions(questionId) {
-    fetch('../process/update_answered_questions.php', {
+    return fetch('../process/update_answered_questions.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,15 +75,15 @@ function handleAnswerButtonClick(event) {
         event.target.style.backgroundColor = 'red'; // Colorer en rouge si la réponse est incorrecte
     }
 
-    // Désactiver les boutons après avoir cliqué sur l'une des réponses
-    disableButtons();
-
     // Mettre à jour la base de données avec l'ID de la question répondue
     var questionId = document.getElementById('questionId').value;
     updateAnsweredQuestions(questionId);
 
+    // Désactiver les boutons après avoir cliqué sur l'une des réponses
+    disableButtons();
+
     // Passer à la question suivante après un délai
-    setTimeout(goToNextQuestion, 2000);
+    setTimeout(goToNextQuestion, 1000);
 }
 
 // Ajouter un écouteur d'événement à chaque bouton

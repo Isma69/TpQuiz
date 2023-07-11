@@ -1,6 +1,7 @@
 <?php
 require_once '../process/config.php';
 require_once '../process/functions.php';
+include '../header.php';
 
 // Récupérer l'utilisateur à partir de l'ID
 $userStatement = $pdo->prepare('SELECT * FROM users WHERE id = ?');
@@ -29,29 +30,38 @@ $questionExistsStatement->execute([$idQuestion]);
 $questionExists = $questionExistsStatement->fetchColumn();
 
 if ($questionExists) {
-    // La question existe, procéder à l'insertion dans la table 'answered_questions'
+  // La question existe, procéder à l'insertion dans la table 'answered_questions'
 
-    // Vérifier si la paire utilisateur-question existe déjà
-    $existingAnswerStatement = $pdo->prepare('SELECT COUNT(*) FROM answered_questions WHERE user_id = ? AND question_id = ?');
+  // Vérifier si la paire utilisateur-question existe déjà
+  $existingAnswerStatement = $pdo->prepare('SELECT COUNT(*) FROM answered_questions WHERE user_id = ? AND question_id = ?');
+  if (!empty($user['id'])) {
     $existingAnswerStatement->execute([$user['id'], $idQuestion]);
-    $existingAnswerCount = $existingAnswerStatement->fetchColumn();
+  } else {
+    // Gérer le cas où $user['id'] est nul
+  }
 
-    if ($existingAnswerCount == 0) {
-        // Insérer la paire utilisateur-question dans la table answered_questions
-        $insertStatement = $pdo->prepare('INSERT INTO answered_questions (user_id, question_id) VALUES (?, ?)');
-        $insertStatement->execute([$user['id'], $idQuestion]);
+  $existingAnswerCount = $existingAnswerStatement->fetchColumn();
+
+  if ($existingAnswerCount == 0) {
+    // Insérer la paire utilisateur-question dans la table answered_questions
+    $insertStatement = $pdo->prepare('INSERT INTO answered_questions (user_id, question_id) VALUES (?, ?)');
+    if (!empty($user['id'])) {
+      $insertStatement->execute([$user['id'], $idQuestion]);
     } else {
-        // La paire utilisateur-question existe déjà, gérer cette situation en conséquence
+      // Gérer le cas où $user['id'] est nul
     }
+  } else {
+    // La paire utilisateur-question existe déjà, gérer cette situation en conséquence
+  }
 
-    // Récupérer les détails de la question à afficher
-    $questionStatement = $pdo->prepare('SELECT * FROM questions WHERE id = ?');
-    $questionStatement->execute([$idQuestion]);
-    $questionData = $questionStatement->fetch();
+  // Récupérer les détails de la question à afficher
+  $questionStatement = $pdo->prepare('SELECT * FROM questions WHERE id = ?');
+  $questionStatement->execute([$idQuestion]);
+  $questionData = $questionStatement->fetch();
 
-    // ...
+  // ...
 } else {
-    // La question correspondante n'existe pas dans la table 'questions', gérer cette situation en conséquence
+  // La question correspondante n'existe pas dans la table 'questions', gérer cette situation en conséquence
 }
 // Créer un tableau avec les options de réponse
 $options = [$questionData['option1'], $questionData['option2'], $questionData['option3'], $questionData['option4']];
@@ -69,87 +79,78 @@ array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
 ?>
 
 <section class="container" id="questionreponse">
-    <div class="row d-flex justify-content-center">
-        <div class="question col-lg-12 col-md-12 col-sm-12 mt-5">
-            <h3><?= $questionData['title'] ?></h3>
+  <div class="question col-lg-12 col-md-12 col-sm-12 mt-5">
+    <h3><?= $questionData['title'] ?></h3>
+  </div>
+
+
+      <div class="container" id="reponses">
+        <div class="">
+          <button id="rep1" value="<?= $options[0] ?>" class="col1 btn btn" onclick="handleAnswerSelection(this.value)"><?= $options[0] ?></button>
+          <button id="rep2" value="<?= $options[1] ?>" class="col2 btn btn" onclick="handleAnswerSelection(this.value)"><?= $options[1] ?></button>
         </div>
-    </div>
-
-    <div class="container" id="reponses```php
-    <div class="row row-cols-2 d-flex justify-content-center">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-        <button id="rep1" value="<?= $options[0] ?>" class="col1" onclick="handleAnswerSelection(this.value)"><?= $options[0] ?></button>
-        <button id="rep2" value="<?= $options[1] ?>" class="col2" onclick="handleAnswerSelection(this.value)"><?= $options[1] ?></button>
+        <div class="">
+          <button id="rep3" value="<?= $options[2] ?>" class="col3 btn btn" onclick="handleAnswerSelection(this.value)"><?= $options[2] ?></button>
+          <button id="rep4" value="<?= $options[3] ?>" class="col4 btn btn" onclick="handleAnswerSelection(this.value)"><?= $options[3] ?></button>
         </div>
-    </div>
+      </div>
 
-    <div class="row row-cols-2 d-flex justify-content-center">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-        <button id="rep3" value="<?= $options[2] ?>" class="col3" onclick="handleAnswerSelection(this.value)"><?= $options[2] ?></button>
-        <button id="rep4" value="<?= $options[3] ?>" class="col4" onclick="handleAnswerSelection(this.value)"><?= $options[3] ?></button>
 
-        </div>
-    </div>
+  <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
+  <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
 
-    <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
-    <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
+  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+    <div id="timer">10</div>
+  </div>
 
-    <div class="row d-flex justify-content-center">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-            <div id="timer">10</div>
-        </div>
-    </div>
 
-    <div class="row d-flex justify-content-center">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-            <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/10</div>
-        </div>
-    </div>
-</div>
+  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+    <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/10</div>
+  </div>
 </section>
 <script>
-// Fonction pour gérer la sélection de réponse par l'utilisateur
-function handleAnswerSelection(selectedAnswer) {
-  // Récupérer la bonne réponse et l'ID de la question
-  var goodAnswer = document.getElementById('goodAnswer').value;
-  var questionId = document.getElementById('questionId').value;
+  // Fonction pour gérer la sélection de réponse par l'utilisateur
+  function handleAnswerSelection(selectedAnswer) {
+    // Récupérer la bonne réponse et l'ID de la question
+    var goodAnswer = document.getElementById('goodAnswer').value;
+    var questionId = document.getElementById('questionId').value;
 
-  // Vérifier si la réponse sélectionnée est correcte
-  if (selectedAnswer === goodAnswer) {
-    // Envoyer la requête AJAX pour mettre à jour le score
-    fetch('../process/update_score.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'user_id=<?= $user['id'] ?>&question_id=' + questionId + '&score=10'
-    })
-    .then(function(response) {
-      if (response.ok) {
-        // Mettre à jour le numéro de question et recharger la page pour passer à la question suivante
-        var progress = document.getElementById('progress');
-        var currentQuestion = parseInt(progress.innerText.split('/')[0]);
-        var totalQuestions = parseInt(progress.innerText.split('/')[1]);
+    // Vérifier si la réponse sélectionnée est correcte
+    if (selectedAnswer === goodAnswer) {
+      // Envoyer la requête AJAX pour mettre à jour le score
+      fetch('../process/update_score.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'user_id=<?= $user['id'] ?>&question_id=' + questionId + '&score=10'
+        })
+        .then(function(response) {
+          if (response.ok) {
+            // Mettre à jour le numéro de question et recharger la page pour passer à la question suivante
+            var progress = document.getElementById('progress');
+            var currentQuestion = parseInt(progress.innerText.split('/')[0]);
+            var totalQuestions = parseInt(progress.innerText.split('/')[1]);
 
-        if (currentQuestion < totalQuestions) {
-          window.location.reload();
-        } else {
-          // Rediriger vers la page du score final
-          window.location.href = 'final_score.php?id=<?= $user['id'] ?>';
-        }
-      } else {
-        console.error('Erreur lors de la mise à jour du score:', response.status);
-      }
-    })
-    .catch(function(error) {
-      console.error('Erreur lors de la mise à jour du score:', error);
-    });
-  } else {
-    // La réponse sélectionnée est incorrecte, recharger la page pour passer à la question suivante
-    window.location.reload();
+            if (currentQuestion < totalQuestions) {
+              window.location.reload();
+            } else {
+              // Rediriger vers la page du score final
+              window.location.href = 'final_score.php?id=<?= $user['id'] ?>';
+            }
+          } else {
+            console.error('Erreur lors de la mise à jour du score:', response.status);
+          }
+        })
+        .catch(function(error) {
+          console.error('Erreur lors de la mise à jour du score:', error);
+        });
+    } else {
+      // La réponse sélectionnée est incorrecte, recharger la page pour passer à la question suivante
+      window.location.reload();
+    }
   }
-}
 </script>
 
 <script src="../js/script.js"></script>
-<script src= "../js/buttonNav.js"></script>
+<script src="../js/buttonNav.js"></script>

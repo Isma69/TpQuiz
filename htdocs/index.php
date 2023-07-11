@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <title>Navbar</title>
-</head>
 
+<link rel="stylesheet" href="styles.css">
 <?php
 
 require_once '../htdocs/process/config.php';
@@ -34,7 +26,7 @@ include 'header.php';
                 </div>
       
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary">LOGIN</button>
+                  <button type="submit" class="btn btn">LOGIN</button>
                 </div>
       
               </form>

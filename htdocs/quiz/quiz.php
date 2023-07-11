@@ -99,14 +99,15 @@ array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
   <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
   <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
 
-  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+  <footer>
+
     <div id="timer">10</div>
   </div>
-
-
-  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+ 
     <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/10</div>
   </div>
+</footer>
+
 </section>
 <script>
   // Fonction pour gérer la sélection de réponse par l'utilisateur

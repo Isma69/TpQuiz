@@ -17,10 +17,7 @@ $answeredQuestionIds = $answeredQuestionIdsStatement->fetchAll(PDO::FETCH_COLUMN
 $countQuestionStatement = $pdo->query('SELECT COUNT(*) AS totalQuestion FROM questions');
 $totalQuestion = $countQuestionStatement->fetch()['totalQuestion'];
 
-
-
-
-/// Générer un ID de question aléatoire qui n'a pas été répondu par l'utilisateur
+// Générer un ID de question aléatoire qui n'a pas été répondu par l'utilisateur
 $unansweredQuestionIds = array_diff(range(1, $totalQuestion), $answeredQuestionIds);
 $idQuestion = array_rand($unansweredQuestionIds);
 
@@ -31,13 +28,10 @@ $questionExists = $questionExistsStatement->fetchColumn();
 
 if ($questionExists) {
   // La question existe, procéder à l'insertion dans la table 'answered_questions'
-
   // Vérifier si la paire utilisateur-question existe déjà
   $existingAnswerStatement = $pdo->prepare('SELECT COUNT(*) FROM answered_questions WHERE user_id = ? AND question_id = ?');
   if (!empty($user['id'])) {
     $existingAnswerStatement->execute([$user['id'], $idQuestion]);
-  } else {
-    // Gérer le cas où $user['id'] est nul
   }
 
   $existingAnswerCount = $existingAnswerStatement->fetchColumn();
@@ -47,35 +41,32 @@ if ($questionExists) {
     $insertStatement = $pdo->prepare('INSERT INTO answered_questions (user_id, question_id) VALUES (?, ?)');
     if (!empty($user['id'])) {
       $insertStatement->execute([$user['id'], $idQuestion]);
-    } else {
-      // Gérer le cas où $user['id'] est nul
     }
-  } else {
-    // La paire utilisateur-question existe déjà, gérer cette situation en conséquence
   }
 
   // Récupérer les détails de la question à afficher
   $questionStatement = $pdo->prepare('SELECT * FROM questions WHERE id = ?');
   $questionStatement->execute([$idQuestion]);
   $questionData = $questionStatement->fetch();
-
-  // ...
 } else {
-  // La question correspondante n'existe pas dans la table 'questions', gérer cette situation en conséquence
+  // La question n'existe pas, gérer cette situation en conséquence
 }
-// Créer un tableau avec les options de réponse
-$options = [$questionData['option1'], $questionData['option2'], $questionData['option3'], $questionData['option4']];
 
-// Supprimer la bonne réponse des options
-$goodAnswerIndex = array_search($questionData['goodAnswer'], $options);
-unset($options[$goodAnswerIndex]);
+if (isset($questionData)) { // Vérifier si $questionData est définie avant de l'utiliser
+  // Créer un tableau avec les options de réponse
+  $options = [$questionData['option1'], $questionData['option2'], $questionData['option3'], $questionData['option4']];
 
-// Mélanger le tableau pour rendre la position des options aléatoire
-shuffle($options);
+  // Supprimer la bonne réponse des options
+  $goodAnswerIndex = array_search($questionData['goodAnswer'], $options);
+  unset($options[$goodAnswerIndex]);
 
-// Insérer la bonne réponse à une position aléatoire dans le tableau
-$randomIndex = rand(0, count($options));
-array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
+  // Mélanger le tableau pour rendre la position des options aléatoire
+  shuffle($options);
+
+  // Insérer la bonne réponse à une position aléatoire dans le tableau
+  $randomIndex = rand(0, count($options));
+  array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
+}
 ?>
 
 <section class="container" id="questionreponse">
@@ -109,12 +100,12 @@ array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
   </div>
 </section>
 <script>
+    let userId = JSON.stringify(<?= $user['id'];?>);
   // Fonction pour gérer la sélection de réponse par l'utilisateur
   function handleAnswerSelection(selectedAnswer) {
     // Récupérer la bonne réponse et l'ID de la question
-    var goodAnswer = document.getElementById('goodAnswer').value;
-    var questionId = document.getElementById('questionId').value;
-
+    let goodAnswer = document.getElementById('goodAnswer').value;
+    let questionId = document.getElementById('questionId').value;
     // Vérifier si la réponse sélectionnée est correcte
     if (selectedAnswer === goodAnswer) {
       // Envoyer la requête AJAX pour mettre à jour le score
@@ -123,20 +114,20 @@ array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: 'user_id=<?= $user['id'] ?>&question_id=' + questionId + '&score=10'
+          body: `user_id=${userId}&question_id=` + questionId + '&score=10'
         })
         .then(function(response) {
           if (response.ok) {
             // Mettre à jour le numéro de question et recharger la page pour passer à la question suivante
-            var progress = document.getElementById('progress');
-            var currentQuestion = parseInt(progress.innerText.split('/')[0]);
-            var totalQuestions = parseInt(progress.innerText.split('/')[1]);
+            let progress = document.getElementById('progress');
+            let currentQuestion = parseInt(progress.innerText.split('/')[0]);
+            let totalQuestions = parseInt(progress.innerText.split('/')[1]);
 
             if (currentQuestion < totalQuestions) {
               window.location.reload();
             } else {
               // Rediriger vers la page du score final
-              window.location.href = 'final_score.php?id=<?= $user['id'] ?>';
+              window.location.href = `final_score.php?id=${userId}`;
             }
           } else {
             console.error('Erreur lors de la mise à jour du score:', response.status);
@@ -147,10 +138,17 @@ array_splice($options, $randomIndex, 0, $questionData['goodAnswer']);
         });
     } else {
       // La réponse sélectionnée est incorrecte, recharger la page pour passer à la question suivante
-      window.location.reload();
+       window.location.reload();
     }
   }
 </script>
 
-<script src="../js/script.js"></script>
+<script src="../js/questions.js"></script>
 <script src="../js/buttonNav.js"></script>
+<script src="../js/timer.js"></script>
+
+ <!-- Bootstrap JS -->
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js%22%3E"></script>
+</body>
+</html>

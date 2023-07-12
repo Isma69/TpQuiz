@@ -1,25 +1,5 @@
-// Timer
-var timerElement = document.getElementById("timer");
-var timeLeft = 10;
-var timerId = setInterval(countdown, 1000);
-
-function countdown() {
-    if (timeLeft === 0) {
-        clearInterval(timerId);
-        // Code à exécuter lorsque le temps est écoulé
-        console.log("Temps écoulé !");
-        displayNextQuestion();
-    } else {
-        timerElement.textContent = timeLeft;
-        timeLeft--;
-    }
-}
-
-// Réponse sélectionnée
-var selectedAnswer = null;
-
 // Boutons de réponse
-var answerButtons = document.querySelectorAll('button[id^="rep"]');
+let answerButtons = document.querySelectorAll('button[id^="rep"]');
 answerButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         selectedAnswer = this.value;
@@ -30,24 +10,26 @@ answerButtons.forEach(function(button) {
                 btn.classList.add("disabled");
             }
         });
-        setTimeout(displayNextQuestion, 1000);
+         setTimeout(displayNextQuestion, 1000);
     });
 });
 
 // Afficher la prochaine question
 function displayNextQuestion() {
     clearInterval(timerId);
-    var form = document.createElement("form");
+    let form = document.createElement("form");
     form.method = "post";
     form.action = "quiz.php?id=<?= $user['id'] ?>";
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.type = "hidden";
     input.name = "selectedAnswer";
     
     // Récupérer la réponse sélectionnée à partir du bouton
-    var selectedButton = document.querySelector("#reponses button.selected");
+    let selectedButton = document.querySelector("#reponses button.selected");
     if (selectedButton) {
         input.value = selectedButton.value;
+    } else {
+        input.value = "0"; // Si aucune réponse n'est sélectionnée, la valeur est mise à 0
     }
     
     form.appendChild(input);

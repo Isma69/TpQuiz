@@ -26,7 +26,7 @@ $scores = $scoresStatement->fetchAll(PDO::FETCH_ASSOC);
     table {
       width: 50%;
       margin: auto;
-      margin-top: 500px; /* Ajustez cette valeur selon vos besoins */
+      margin-top: 200px; /* Ajustez cette valeur selon vos besoins */
       border-collapse: collapse;
     }
     
@@ -48,9 +48,13 @@ $scores = $scoresStatement->fetchAll(PDO::FETCH_ASSOC);
   text-decoration: underline;
   text-decoration-color: rgb(255, 200, 97);
   position: absolute; /* Position absolue */
-  top: 40%; /* Déplacer le haut à 50% de la page */
+  top: 20%; /* Déplacer le haut à 50% de la page */
   left: 50%; /* Déplacer la gauche à 50% de la page */
   transform: translate(-50%, -50%); /* Centrer horizontalement et verticalement */
+}
+
+a {
+    color : red;
 }
 
 
@@ -83,5 +87,7 @@ $scores = $scoresStatement->fetchAll(PDO::FETCH_ASSOC);
       ?>
     </tbody>
   </table>
+
+  <a href="index.php">Retour à l'accueil</a>
 </body>
 </html>

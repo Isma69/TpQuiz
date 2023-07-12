@@ -1,5 +1,5 @@
 // Sélectionner tous les boutons de réponse
-var buttons = document.querySelectorAll('button[id^="rep"]');
+let buttons = document.querySelectorAll('button[id^="rep"]');
 
 // Fonction pour désactiver les boutons de réponse
 function disableButtons() {
@@ -20,31 +20,32 @@ function goToNextQuestion() {
     disableButtons();
 
     // Mettre à jour la base de données avec l'ID de la question répondue
-    var questionId = document.getElementById('questionId').value;
+    let questionId = document.getElementById('questionId').value;
     updateAnsweredQuestions(questionId)
         .then(function() {
             // Passer à la question suivante après un délai
             setTimeout(function() {
-                window.location.reload();
-            }, 1000);
+                 window.location.reload();
+            }, 1500);
         })
         .catch(function(error) {
             console.log('Failed to update answered questions:', error);
             // Passer à la question suivante même en cas d'erreur
             setTimeout(function() {
-                window.location.reload();
+                 window.location.reload();
             },1000);
         });
 }
 
 // Fonction pour mettre à jour la base de données avec l'ID de la question répondue
 function updateAnsweredQuestions(questionId) {
+    console.log(userId);
     return fetch('../process/update_answered_questions.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `userId=<?= $user['id'] ?>&questionId=${questionId}`
+        body: `userId=${userId}&questionId=${questionId}`
     })
     .then(response => {
         if (response.ok) {
@@ -61,7 +62,7 @@ function updateAnsweredQuestions(questionId) {
 // Fonction pour gérer le clic sur un bouton de réponse
 function handleAnswerButtonClick(event) {
     // Récupérer la valeur de la bonne réponse
-    var goodAnswer = document.getElementById('goodAnswer').value;
+    let goodAnswer = document.getElementById('goodAnswer').value;
 
     // Réinitialiser les couleurs des boutons
     buttons.forEach(function (btn) {
@@ -76,14 +77,14 @@ function handleAnswerButtonClick(event) {
     }
 
     // Mettre à jour la base de données avec l'ID de la question répondue
-    var questionId = document.getElementById('questionId').value;
+    let questionId = document.getElementById('questionId').value;
     updateAnsweredQuestions(questionId);
 
     // Désactiver les boutons après avoir cliqué sur l'une des réponses
     disableButtons();
 
     // Passer à la question suivante après un délai
-    setTimeout(goToNextQuestion, 1000);
+     setTimeout(goToNextQuestion, 1500);
 }
 
 // Ajouter un écouteur d'événement à chaque bouton

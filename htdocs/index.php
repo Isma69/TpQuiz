@@ -1,7 +1,4 @@
-
-<link rel="stylesheet" href="styles.css">
 <?php
-
 require_once '../htdocs/process/config.php';
 include 'header.php';
 ?>
@@ -10,8 +7,6 @@ include 'header.php';
 
 
   <section>
-
-    <section class="mt-5 pt-5">
 
         <!-----*** LOGIN ***----->
         <div class="container logincontainer">

@@ -20,19 +20,19 @@ h3 {
   text-align: center;
   font-size: 24px;
   line-height: 1.5;
+  margin-top: 150px;
 }
 
 .container-buttons {
   display: flex;
-  
   justify-content: center;
   align-items: center;
   margin-top: 50px;
 }
 
 .container-buttons button {
-  width: 150px;
-  height: 40px;
+  width: 200px;
+  height: 60px;
   margin: 10px;
 }
 
@@ -51,17 +51,23 @@ button.btn.btn:hover {
   background-color: rgb(255, 220, 147);
 }
 
-div#timer {
+#timer {
   color: white;
+  font-size: 36px;
   text-align: center;
-  font-size: 35px;
-  margin-top: 50px;
+  margin: 20px;
+  border: 2px solid red;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 }
 
-div#progress {
+#progress {
   color: white;
-  text-align: center;
-  margin-top: 50px;
 }
 
 .button-container {
@@ -79,11 +85,7 @@ div#progress {
 }
 
 b {
-  color: white
-}
-
-div#reponses.container {
-
+  color: white;
 }
 
 #reponses {
@@ -93,7 +95,60 @@ div#reponses.container {
 }
 
 #reponses button {
-  width: 200px; /* Choisissez la largeur souhaitée */
-  margin-bottom: 10px; /* Espace entre les boutons (facultatif) */
+  width: 200px;
+  margin-bottom: 10px;
   text-align: center;
+}
+
+.timerCount {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#rep1.col1.btn,
+#rep2.col2.btn,
+#rep3.col3.btn,
+#rep4.col4.btn {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  white-space: normal;
+  overflow-wrap: normal;
+  flex-grow: 1;
+  margin: 5px;
+}
+
+#reponses.container {
+  position: fixed;
+  display: flex;
+  flex: 1;
+  margin: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.score-container {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+p {
+  text-decoration: underline;
+  text-decoration-color: rgb(255, 200, 97);
+}
+
+.nav-link-margin {
+  margin-right: 10px;
 }

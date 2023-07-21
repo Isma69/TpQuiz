@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="../styles.css">
+
 <?php
 require_once '../process/config.php';
 require_once '../process/functions.php';
@@ -89,15 +91,14 @@ if (isset($questionData)) { // Vérifier si $questionData est définie avant de 
 
   <input type="hidden" value="<?= $questionData['goodAnswer'] ?>" id="goodAnswer">
   <input type="hidden" value="<?= $questionData['id'] ?>" id="questionId">
+  <div class="timerCount">
 
-  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-    <div id="timer">10</div>
-  </div>
+<div id="timer">15</div>
 
+<div id="progress"><?= count($answeredQuestionIds) + 1 ?>/10</div>
 
-  <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-    <div id="progress"><?= count($answeredQuestionIds) + 1 ?>/10</div>
-  </div>
+</div>
+
 </section>
 <script>
     let userId = JSON.stringify(<?= $user['id'];?>);
@@ -122,8 +123,8 @@ if (isset($questionData)) { // Vérifier si $questionData est définie avant de 
             let progress = document.getElementById('progress');
             let currentQuestion = parseInt(progress.innerText.split('/')[0]);
             let totalQuestions = parseInt(progress.innerText.split('/')[1]);
-
-            if (currentQuestion < totalQuestions) {
+            let maxQuestions = 10;
+            if (currentQuestion < totalQuestions || currentQuestion > maxQuestions) {
               window.location.reload();
             } else {
               // Rediriger vers la page du score final
@@ -142,13 +143,9 @@ if (isset($questionData)) { // Vérifier si $questionData est définie avant de 
     }
   }
 </script>
-
 <script src="../js/questions.js"></script>
 <script src="../js/buttonNav.js"></script>
 <script src="../js/timer.js"></script>
-
- <!-- Bootstrap JS -->
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js%22%3E"></script>
-</body>
-</html>
+<?php
+include '../footer.php';
+?>

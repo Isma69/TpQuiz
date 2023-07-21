@@ -19,11 +19,7 @@ if (isset($_POST['selectedAnswer'])) {
             $correctCount++;
         }
     }
-} else {
-    // Gérer le cas où la clé 'selectedAnswer' n'est pas définie dans $_POST
-    // Vous pouvez afficher un message d'erreur ou prendre une autre action appropriée
 }
-
     return $correctCount;
 }
 

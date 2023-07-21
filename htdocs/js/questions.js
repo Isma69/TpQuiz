@@ -91,3 +91,4 @@ function handleAnswerButtonClick(event) {
 buttons.forEach(function (button) {
     button.addEventListener('click', handleAnswerButtonClick);
 });
+

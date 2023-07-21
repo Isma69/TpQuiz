@@ -14,49 +14,20 @@ $score = $scoreStatement->fetchColumn();
 
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Score final</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            margin-top: 200px;
-            padding: 20px;
-            background-color: #f2f2f2;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-        }
-        
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        
-        p {
-            margin-bottom: 10px;
-        }
-        a {
-            color : red;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Score final</h1>
-        <p>Score final de l'utilisateur <?php echo $user['pseudo']; ?> : <?php echo $score; ?></p>
+
+    <div class="score-container">
+</br>
+        <p><?php echo $user['pseudo']; ?> : <?php echo $score; ?>/100 points !</p>
     </div>
-    <a href="index.php">Retour à l'accueil</a>
 </body>
 </html>
+
 
 
